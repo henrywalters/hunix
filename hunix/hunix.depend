@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1440530588 source:/home/haha/hunix/hunix/src/Shell.cpp
+	"Shell.h"
+
+1440530588 /home/haha/hunix/hunix/include/Shell.h
+
+1440540229 source:/home/haha/hunix/hunix/main.cpp
+	<iostream>
+	<string>
+	<vector>
+	<cstring>
+	<sstream>
+	<iterator>
+	<algorithm>
+	<fstream>
+
