@@ -6,14 +6,14 @@
 #include <iterator>
 #include <algorithm>
 #include <fstream>
-
+#include <stdio.h>
 
 using namespace std;
 
 
 vector<string> cut_up(char bash[])
 {
-    char seps[] = " ,\t\n";
+    char seps[] = " ";
     char *token;
 
     vector<string> return_string;
@@ -23,6 +23,7 @@ vector<string> cut_up(char bash[])
         return_string.push_back(token);
         token = strtok( NULL, seps );
     }
+
     return return_string;
 }
 
@@ -71,7 +72,7 @@ string shell_start()
             {
                 userData.push_back(line);
             }
-            users.close();
+
             for (int i = 0; i < userData.size(); i++)
             {
                 string x = userData[i];
@@ -88,7 +89,10 @@ string shell_start()
                     access_granted = true;
                     user = username + "@hunix";
                 }
+
             }
+            if (access_granted == false) { cout << "Access Denied\n\n";}
+            users.close();
         }
     }
     else
@@ -155,20 +159,85 @@ string shell_start()
     return (user);
 }
 
+bool mkdir(string dir)
+{
+    ifstream input;
+    ofstream output;
+    input.open("dirs.txt");
+    vector<string> dirs;
+    string line;
+    while (getline(input,line))
+    {
+        dirs.push_back(line);
+    }
+    bool exists = false;
+    for (int i = 0; i < dirs.size(); i++)
+    {
+        if (dir == dirs[i])
+        {
+            exists = true;
+        }
+    }
+    if (exists == true) { return false ;  }
+    else
+    {
+        input.close();
+        output.open("dirs.txt",ios::app);
+        output << dir << "\n";
+        output.close();
+        return true;
+    }
+}
+
 bool bash(string user)
 {
+    string dir = "";
     bool go = true;
-    char input[100];
-    cout << user << ":~$ ";
-    cin >> input;
-    vector<string> bash_cmd = cut_up(input);
+
+    bool valid = false;
+    string input = "";
+    cout << user << ":~" + dir + "$ ";
+    char x[100] = "";
+    getline(cin,input);
+    getline(cin,input);
+
+
+    for (int i = 0; i < input.size(); i++)
+    {
+        x[i] = input[i];
+    }
+    vector<string> bash_cmd = cut_up(x);
+
     if (bash_cmd.size() == 1 && bash_cmd[0] == "logout")
     {
         go = false;
     }
 
+    if (bash_cmd[0] == "mkdir" && bash_cmd.size() == 2)
+    {
+        bool success = mkdir(bash_cmd[1]);
+        if (success == true)
+        {
+            valid = true;
+        }
+        else { valid = true; cout << "mkdir: cannot create directory: '" + bash_cmd[1] + "': file exists\n"; }
+    }
+    if (bash_cmd[0] == "mkdir" && bash_cmd.size() == 1)
+    {
+        cout << "mkdir: missing operand\n";
+        valid = true;
+    }
 
+    if (valid == false)
+    {
+        cout << bash_cmd[0] << ":command not found\n";
+    }
+    else
+    {
+        cout << "\n";
+    }
 
+    bash_cmd.clear();
     return (go);
 }
 

@@ -4,7 +4,7 @@
 
 1440530588 /home/haha/hunix/hunix/include/Shell.h
 
-1440540229 source:/home/haha/hunix/hunix/main.cpp
+1440548241 source:/home/haha/hunix/hunix/main.cpp
 	<iostream>
 	<string>
 	<vector>
@@ -13,4 +13,5 @@
 	<iterator>
 	<algorithm>
 	<fstream>
+	<stdio.h>
 
